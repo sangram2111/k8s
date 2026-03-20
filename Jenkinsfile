@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-org>/Kubernetes_project.git'
+                git branch: 'main', url: 'https://github.com/sangram2111/k8s.git'
             }
         }
 
