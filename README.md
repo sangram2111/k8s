@@ -164,7 +164,9 @@ git push
 1. On the Jenkins dashboard, click **New Item**
 2. Enter name: `abstergo-website`
 3. Select **Pipeline**, then click **OK**
-4. Under **Pipeline**:
+4. Under **Build Triggers**, check **Poll SCM**
+   - In the **Schedule** field, enter: `* * * * *` (checks GitHub every minute)
+5. Under **Pipeline**:
    - **Definition:** select **Pipeline script from SCM**
    - **SCM:** Git
    - **Repository URL:** `https://github.com/<your-username>/<your-repo>.git`
@@ -177,9 +179,9 @@ git push
 ## Step 11 — Trigger the First Build
 
 1. In Jenkins, open the `abstergo-website` job
-2. Click **Build Now**
+2. Click **Build Now** to trigger the first build manually
 3. Watch the build progress in **Build History** → click the build number → **Console Output**
-4. After every code change, push to GitHub and click **Build Now** again to deploy
+4. From now on, every push to GitHub will be detected automatically within 1 minute and trigger a new build — no manual action needed
 
 ---
 
@@ -206,8 +208,9 @@ minikube service abstergo-website --url
 ## How It Works
 
 1. Developers push code to the `main` branch on GitHub
-2. GitHub webhook triggers the Jenkins pipeline
-3. Jenkins builds a Docker image tagged with the build number
-4. Image is pushed to DockerHub
-5. Kubernetes deployment is updated with the new image tag
-6. Rolling update ensures zero-downtime deployment
+2. Jenkins polls GitHub every minute and detects the new commit
+3. Jenkins pipeline is triggered automatically
+4. Kaniko builds a Docker image tagged with the build number
+5. Image is pushed to DockerHub
+6. Kubernetes deployment is updated with the new image tag
+7. Rolling update ensures zero-downtime deployment
