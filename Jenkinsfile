@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USER = 'your-dockerhub-username'   // Replace with actual DockerHub username
+        DOCKER_HUB_USER = 'sangram2111'   // Replace with actual DockerHub username
         IMAGE_NAME      = 'abstergo-website'
         IMAGE_TAG       = "${BUILD_NUMBER}"
     }
