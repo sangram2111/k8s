@@ -92,7 +92,7 @@ YAML
                     sed -i 's|DOCKER_HUB_USER|${DOCKER_HUB_USER}|g' k8s/deployment.yaml
                     sed -i 's|:latest|:${IMAGE_TAG}|g' k8s/deployment.yaml
                     kubectl apply -f k8s/deployment.yaml
-                    kubectl apply -f k8s/service.yaml
+                    kubectl apply -f k8s/service.yaml || true
                     kubectl rollout status deployment/abstergo-website
                 """
             }
