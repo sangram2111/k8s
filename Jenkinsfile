@@ -88,13 +88,22 @@ YAML
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh """
-                    sed -i 's|DOCKER_HUB_USER|${DOCKER_HUB_USER}|g' k8s/deployment.yaml
-                    sed -i 's|:latest|:${IMAGE_TAG}|g' k8s/deployment.yaml
-                    kubectl apply -f k8s/deployment.yaml
-                    kubectl apply -f k8s/service.yaml || true
-                    kubectl rollout status deployment/abstergo-website
-                """
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        # Create image pull secret in default namespace
+                        kubectl delete secret dockerhub-pull-secret -n default --ignore-not-found
+                        kubectl create secret docker-registry dockerhub-pull-secret -n default \
+                            --docker-server=https://index.docker.io/v1/ \
+                            --docker-username=\$DOCKER_USER \
+                            --docker-password=\$DOCKER_PASS
+
+                        sed -i 's|DOCKER_HUB_USER|${DOCKER_HUB_USER}|g' k8s/deployment.yaml
+                        sed -i 's|:latest|:${IMAGE_TAG}|g' k8s/deployment.yaml
+                        kubectl apply -f k8s/deployment.yaml
+                        kubectl apply -f k8s/service.yaml || true
+                        kubectl rollout status deployment/abstergo-website -n default
+                    """
+                }
             }
         }
     }

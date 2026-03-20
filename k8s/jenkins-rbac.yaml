@@ -15,7 +15,7 @@ metadata:
   name: jenkins-admin
 rules:
   - apiGroups: ["", "apps", "extensions"]
-    resources: ["pods", "deployments", "services", "replicasets"]
+    resources: ["pods", "pods/log", "deployments", "services", "replicasets", "secrets"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

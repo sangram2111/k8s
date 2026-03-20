@@ -164,8 +164,7 @@ git push
 1. On the Jenkins dashboard, click **New Item**
 2. Enter name: `abstergo-website`
 3. Select **Pipeline**, then click **OK**
-4. Under **Build Triggers**, check **GitHub hook trigger for GITScm polling**
-5. Under **Pipeline**:
+4. Under **Pipeline**:
    - **Definition:** select **Pipeline script from SCM**
    - **SCM:** Git
    - **Repository URL:** `https://github.com/<your-username>/<your-repo>.git`
@@ -175,28 +174,16 @@ git push
 
 ---
 
-## Step 11 — Configure GitHub Webhook
+## Step 11 — Trigger the First Build
 
-1. Go to your GitHub repository → **Settings → Webhooks → Add webhook**
-2. Fill in:
-   - **Payload URL:** `http://<node-ip>:32000/github-webhook/`
-   - **Content type:** `application/json`
-   - **Which events:** select **Just the push event**
-3. Click **Add webhook**
-
-> **Note:** The Jenkins URL must be publicly reachable for GitHub webhooks to work. If running locally, you can use [ngrok](https://ngrok.com) to expose Jenkins, or trigger builds manually.
+1. In Jenkins, open the `abstergo-website` job
+2. Click **Build Now**
+3. Watch the build progress in **Build History** → click the build number → **Console Output**
+4. After every code change, push to GitHub and click **Build Now** again to deploy
 
 ---
 
-## Step 12 — Trigger the First Build
-
-**Option A — Automatic:** Push any code change to the `main` branch. The webhook triggers the pipeline.
-
-**Option B — Manual:** In Jenkins, open the `abstergo-website` job and click **Build Now**.
-
----
-
-## Step 13 — Access the Deployed Website
+## Step 12 — Access the Deployed Website
 
 After a successful build, the website is live:
 
