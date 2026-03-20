@@ -66,8 +66,14 @@ YAML
                         kubectl wait --for=condition=Ready pod/kaniko-${BUILD_NUMBER} -n jenkins --timeout=30s 2>/dev/null || true
                         kubectl logs -f kaniko-${BUILD_NUMBER} -n jenkins
 
-                        # Check if Kaniko succeeded
-                        PHASE=$(kubectl get pod kaniko-${BUILD_NUMBER} -n jenkins -o jsonpath='{.status.phase}')
+                        # Wait for pod to finish
+                        while true; do
+                            PHASE=$(kubectl get pod kaniko-${BUILD_NUMBER} -n jenkins -o jsonpath='{.status.phase}')
+                            if [ "$PHASE" = "Succeeded" ] || [ "$PHASE" = "Failed" ]; then
+                                break
+                            fi
+                            sleep 2
+                        done
                         kubectl delete pod kaniko-${BUILD_NUMBER} -n jenkins --ignore-not-found
                         rm -f /tmp/kaniko-config.json /tmp/kaniko-pod.yaml
 
